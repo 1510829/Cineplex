@@ -1,0 +1,83 @@
+# user: admin_cpx, pass: 123456
+
+CREATE TABLE equipo (
+  id_equipo INT NOT NULL AUTO_INCREMENT,
+  Descripcion VARCHAR(45) NOT NULL,
+  Serie VARCHAR(20) NOT NULL,
+  Modelo VARCHAR(45) NOT NULL,
+  Marca VARCHAR(25) NOT NULL,
+  Fec_Ingreso DATE NOT NULL,
+  PRIMARY KEY (id_equipo)
+  );
+  
+CREATE TABLE proveedor (
+  id_prov INT NOT NULL AUTO_INCREMENT,
+  Razon_social VARCHAR(45) NOT NULL,
+  Descripcion VARCHAR(45) NOT NULL,
+  Estado CHAR(1) NULL,
+  PRIMARY KEY (id_prov)
+  );
+
+CREATE TABLE arrendamiento (
+  id_arrend CHAR(5) NOT NULL,
+  Descripcion VARCHAR(45) NOT NULL,
+  fecha_ingreso DATE NOT NULL,
+  Fecha_Venci DATE NULL,
+  Estado CHAR(1) NULL,
+  Id_prov INT NOT NULL,
+  FOREIGN KEY (id_prov) REFERENCES proveedor (id_prov) ON DELETE CASCADE,
+  PRIMARY KEY (id_arrend)
+  );
+
+CREATE TABLE almacen (
+  id_almacen INT NOT NULL AUTO_INCREMENT,
+  Nombre VARCHAR(45) NOT NULL,
+  Direccion VARCHAR(70) NOT NULL,
+  Ubicacion VARCHAR(30) NULL,
+  PRIMARY KEY (id_almacen)
+  );
+
+CREATE TABLE persona (
+  DNI CHAR(8) NOT NULL,
+  Nombre VARCHAR(45) NOT NULL,
+  Apellidos VARCHAR(45) NOT NULL,
+  Fec_Nac DATE NOT NULL,
+  Sexo CHAR(1) NOT NULL,
+  Estado VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`DNI`)
+  );
+
+CREATE TABLE sede (
+  id_sede INT NOT NULL AUTO_INCREMENT,
+  Nombre VARCHAR(45) NOT NULL,
+  Estado VARCHAR(45) NOT NULL,
+  Ubicacion VARCHAR(45) NOT NULL,
+  PRIMARY KEY (id_sede)
+  );
+
+CREATE TABLE detalle_equipo (
+  id_det_equipo INT NOT NULL AUTO_INCREMENT,
+  Persona_DNI CHAR(8) NOT NULL,
+  id_arrend CHAR(5) NOT NULL,
+  id_almacen INT NOT NULL,
+  id_equipo INT NOT NULL,
+  id_sede INT NOT NULL,
+  Fecha_recepcion DATE NULL,
+  Fecha_Salida DATE NULL,
+  FOREIGN KEY (Persona_DNI) REFERENCES persona (DNI) ON DELETE CASCADE,
+  FOREIGN KEY (id_arrend) REFERENCES arrendamiento (id_arrend) ON DELETE CASCADE,
+  FOREIGN KEY (id_almacen) REFERENCES almacen (id_almacen) ON DELETE CASCADE,
+  FOREIGN KEY (id_equipo) REFERENCES equipo (id_equipo) ON DELETE CASCADE,
+  FOREIGN KEY (id_sede) REFERENCES sede (id_sede) ON DELETE CASCADE,
+  PRIMARY KEY (id_det_equipo)
+  );
+
+CREATE TABLE detalle_arrend (
+  id_det_arrend INT NOT NULL AUTO_INCREMENT,
+  id_equipo INT NOT NULL,
+  id_arrend CHAR(5) NOT NULL,
+  FOREIGN KEY (id_equipo) REFERENCES equipo (id_equipo) ON DELETE CASCADE,
+  FOREIGN KEY (id_arrend) REFERENCES arrendamiento (id_arrend) ON DELETE CASCADE,
+  PRIMARY KEY (id_det_arrend)
+  );
+  
